@@ -1,0 +1,33 @@
+﻿<Window x:Class="AwsDoc4.Views.MFAWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        v:DialogCloser.DialogResult="{Binding DialogResult}"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:v="clr-namespace:AwsDoc4.Views"
+    xmlns:vm="clr-namespace:AwsDoc4.ViewModels"
+    xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="MFA">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBox Margin="4" Text="{Binding MFACode.Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextBox}" wpf:HintAssist.Hint="Enter MFA Code." Width="200"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Command="{Binding OKCommand}" Style="{StaticResource MaterialDesignRaisedLightButton}" wpf:ElevationAssist.Elevation="Dp12">
+                <wpf:PackIcon Kind="OkRu"/>
+            </Button>
+            <Button Command="{Binding CancelCommand}" Style="{StaticResource MaterialDesignRaisedLightButton}" wpf:ElevationAssist.Elevation="Dp12">
+                <wpf:PackIcon Kind="Cancel"/>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>

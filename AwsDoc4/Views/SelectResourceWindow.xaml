@@ -1,0 +1,64 @@
+﻿<Window x:Class="AwsDoc4.Views.SelectResourceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        v:DialogCloser.DialogResult="{Binding DialogResult}"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mahApps="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:v="clr-namespace:AwsDoc4.Views"
+    xmlns:vm="clr-namespace:AwsDoc4.ViewModels"
+    Background="{DynamicResource MaterialDesignPaper}"
+    BorderThickness="1"
+    FontFamily="pack:application,,,/MaterialDesignThemes.Wpf;conponent/Resources/Roboto/#Roboto"
+    Style="{StaticResource MaterialDesignWindow}"
+    TextElement.FontSize="16"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        TextElement.FontWeight="Regular"
+    TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+    TextOptions.TextFormattingMode="Ideal"
+    TextOptions.TextRenderingMode="Auto"
+        mc:Ignorable="d"
+        Title="リソース" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <ComboBox  Margin="4" ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType.Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedComboBox}" wpf:HintAssist.Hint="リソースタイプ">
+            <b:Interaction.Triggers>
+                <b:EventTrigger EventName="SelectionChanged">
+                    <b:InvokeCommandAction 
+                    Command="{Binding RefreshResourcesCommand}" CommandParameter="{Binding SelectedType.Value}" />
+                </b:EventTrigger>
+            </b:Interaction.Triggers>
+        </ComboBox>
+        <GroupBox Margin="4" Grid.Row="2" Style="{StaticResource MaterialDesignCardGroupBox}" Header="リソース一覧">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBox HorizontalAlignment="Left" Width="300" Margin="4" Text="{Binding SearchString.Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextBox}" wpf:HintAssist.Hint="検索文字列"/>
+                <ListView Grid.Row="1" Margin="4" ItemsSource="{Binding FilteredView}" SelectedItem="{Binding SelectedResource.Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="MouseDoubleClick">
+                            <b:InvokeCommandAction 
+                    Command="{Binding DataContext.SelectResourceCommand,RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                            CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType=ListView}}"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
+                    <ListView.View>
+                        <GridView>
+                            <GridView.Columns>
+                                <GridViewColumn Header="タイプ" DisplayMemberBinding="{Binding Type}"/>
+                                <GridViewColumn Header="名前" DisplayMemberBinding="{Binding Name}"/>
+                                <GridViewColumn Header="ARN" DisplayMemberBinding="{Binding Arn}"/>
+                            </GridView.Columns>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

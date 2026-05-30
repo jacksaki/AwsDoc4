@@ -1,0 +1,322 @@
+﻿<UserControl
+    x:Class="AwsDoc4.Views.ColorSettingsBox"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="clr-namespace:AwsDoc4.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:AwsDoc4.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:v="clr-namespace:AwsDoc4.Views"
+    xmlns:vm="clr-namespace:AwsDoc4.ViewModels"
+    xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:wpfColors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <conv:ColorToStringConverter x:Key="ColorToStringConverter" />
+        <conv:ColorToBrushConverter x:Key="ColorToBrushConverter" />
+        <conv:BrushToHexConverter x:Key="BrushToHexConverter" />
+        <conv:MultiValueEqualityConverter x:Key="MultiValueEqualityConverter" />
+        <DataTemplate x:Key="SwatchPrimaryColorTemplate" DataType="{x:Type Color}">
+            <Button Width="40" Height="40" Background="{Binding Converter={StaticResource ColorToBrushConverter}}" Command="{Binding DataContext.ChangePrimaryHueCommand, RelativeSource={RelativeSource AncestorType=v:ColorSettingsBox}}" CommandParameter="{Binding}">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button">
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Margin" Value="1,1,0,0" />
+                        <Setter Property="Tag" Value="0" />
+                        <Setter Property="v:ButtonAssist.UniformCornerRadius" Value="0" />
+                        <Setter Property="wpf:ElevationAssist.Elevation" Value="Dp0" />
+                        <Setter Property="wpf:RippleAssist.IsDisabled" Value="True" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="(v:ButtonAssist.UniformCornerRadius)"
+                                                To="8"
+                                                Duration="0:0:0.18" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="(v:ButtonAssist.UniformCornerRadius)"
+                                                From="8"
+                                                Duration="0:0:0.18" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                        <Binding
+                                            Mode="OneWay"
+                                            Path="DataContext.PrimaryColor"
+                                            RelativeSource="{RelativeSource AncestorType=v:ColorSettingsBox}" />
+                                        <Binding Mode="OneWay" />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="(v:ButtonAssist.UniformCornerRadius)"
+                                                To="20"
+                                                Duration="0:0:0.18" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="(v:ButtonAssist.UniformCornerRadius)"
+                                                From="20"
+                                                Duration="0:0:0.18" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </DataTemplate>
+        <DataTemplate x:Key="SwatchSecondaryColorTemplate" DataType="{x:Type Color}">
+            <Button Width="40" Height="40" Background="{Binding Converter={StaticResource ColorToBrushConverter}}" Command="{Binding DataContext.ChangeSecondaryHueCommand, RelativeSource={RelativeSource AncestorType=v:ColorSettingsBox}}" CommandParameter="{Binding}">
+                <Button.Style>
+                    <Style BasedOn="{StaticResource MaterialDesignRaisedButton}" TargetType="Button">
+                        <Setter Property="BorderThickness" Value="0" />
+                        <Setter Property="Margin" Value="1,1,0,0" />
+                        <Setter Property="Tag" Value="0" />
+                        <Setter Property="v:ButtonAssist.UniformCornerRadius" Value="0" />
+                        <Setter Property="wpf:ElevationAssist.Elevation" Value="Dp0" />
+                        <Setter Property="wpf:RippleAssist.IsDisabled" Value="True" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="(v:ButtonAssist.UniformCornerRadius)"
+                                                To="8"
+                                                Duration="0:0:0.18" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="(v:ButtonAssist.UniformCornerRadius)"
+                                                From="8"
+                                                Duration="0:0:0.18" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>
+
+                            <DataTrigger Value="True">
+                                <DataTrigger.Binding>
+                                    <MultiBinding Converter="{StaticResource MultiValueEqualityConverter}">
+                                        <Binding
+                                            Mode="OneWay"
+                                            Path="DataContext.SecondaryColor"
+                                            RelativeSource="{RelativeSource AncestorType=v:ColorSettingsBox}" />
+                                        <Binding Mode="OneWay" />
+                                    </MultiBinding>
+                                </DataTrigger.Binding>
+
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="(v:ButtonAssist.UniformCornerRadius)"
+                                                To="20"
+                                                Duration="0:0:0.18" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation
+                                                Storyboard.TargetProperty="(v:ButtonAssist.UniformCornerRadius)"
+                                                From="20"
+                                                Duration="0:0:0.18" />
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock VerticalAlignment="Center" Text="Light" />
+            <ToggleButton Margin="8,0,16,0" IsChecked="{Binding IsDarkTheme.Value}" />
+            <TextBlock VerticalAlignment="Center" Text="Dark" />
+        </StackPanel>
+        <GroupBox Grid.Row="1" Grid.Column="0" Margin="3" Style="{StaticResource MaterialDesignCardGroupBox}">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal">
+                            <TextBlock Margin="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="Primary" />
+                            <TextBlock Margin="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding DataContext.PrimaryColor,RelativeSource={RelativeSource AncestorType=v:ColorSettingsBox}, Converter={StaticResource ColorToStringConverter}}" />
+                        </StackPanel>
+                        <Button Grid.Row="1" Grid.Column="0" Content="Light" IsHitTestVisible="False" Style="{StaticResource MaterialDesignFlatLightBgButton}" />
+                        <Button Grid.Row="1" Grid.Column="1" Content="Mid" IsHitTestVisible="False" Style="{StaticResource MaterialDesignFlatMidBgButton}" />
+                        <Button Grid.Row="1" Grid.Column="2" Content="Dark" IsHitTestVisible="False" Style="{StaticResource MaterialDesignFlatDarkBgButton}" />
+                    </Grid>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Margin" Value="1,1,0,0" />
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="Width" Value="40" />
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <Rectangle Width="80" />
+                    <TextBlock Text="50" />
+                    <TextBlock Text="100" />
+                    <TextBlock Text="200" />
+                    <TextBlock Text="300" />
+                    <TextBlock Text="400" />
+                    <TextBlock Text="500" />
+                    <TextBlock Text="600" />
+                    <TextBlock Text="700" />
+                    <TextBlock Text="800" />
+                    <TextBlock Text="900" />
+                    <TextBlock Text="A100" />
+                    <TextBlock Text="A200" />
+                    <TextBlock Text="A400" />
+                    <TextBlock Text="A700" />
+                </StackPanel>
+
+                <ItemsControl ItemsSource="{Binding Swatches}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type wpfColors:ISwatch}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Width="80" VerticalAlignment="Center" Text="{Binding Name, Mode=OneTime}" />
+                                <ItemsControl ItemTemplate="{StaticResource SwatchPrimaryColorTemplate}" ItemsSource="{Binding Lookup.Values, Mode=OneTime}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Grid.Column="1" Margin="3" wpf:ColorZoneAssist.Mode="SecondaryMid" Style="{StaticResource MaterialDesignCardGroupBox}">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.ColumnSpan="3" Orientation="Horizontal">
+                            <TextBlock Margin="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="Secondary" />
+                            <TextBlock Margin="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="{Binding DataContext.SecondaryColor,RelativeSource={RelativeSource AncestorType=v:ColorSettingsBox}, Converter={StaticResource ColorToStringConverter}}" />
+                        </StackPanel>
+                        <Button Grid.Row="1" Grid.Column="0" Content="Light" IsHitTestVisible="False" Style="{StaticResource MaterialDesignFlatSecondaryLightBgButton}" />
+                        <Button Grid.Row="1" Grid.Column="1" Content="Mid" IsHitTestVisible="False" Style="{StaticResource MaterialDesignFlatSecondaryMidBgButton}" />
+                        <Button Grid.Row="1" Grid.Column="2" Content="Dark" IsHitTestVisible="False" Style="{StaticResource MaterialDesignFlatSecondaryDarkBgButton}" />
+                    </Grid>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Margin" Value="1,1,0,0" />
+                            <Setter Property="TextAlignment" Value="Center" />
+                            <Setter Property="Width" Value="40" />
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <Rectangle Width="80" />
+                    <TextBlock Text="50" />
+                    <TextBlock Text="100" />
+                    <TextBlock Text="200" />
+                    <TextBlock Text="300" />
+                    <TextBlock Text="400" />
+                    <TextBlock Text="500" />
+                    <TextBlock Text="600" />
+                    <TextBlock Text="700" />
+                    <TextBlock Text="800" />
+                    <TextBlock Text="900" />
+                    <TextBlock Text="A100" />
+                    <TextBlock Text="A200" />
+                    <TextBlock Text="A400" />
+                    <TextBlock Text="A700" />
+                </StackPanel>
+
+                <ItemsControl ItemsSource="{Binding Swatches}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type wpfColors:ISwatch}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Width="80" VerticalAlignment="Center" Text="{Binding Name, Mode=OneTime}" />
+                                <ItemsControl ItemTemplate="{StaticResource SwatchSecondaryColorTemplate}" ItemsSource="{Binding Lookup.Values, Mode=OneTime}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <VirtualizingStackPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</UserControl>

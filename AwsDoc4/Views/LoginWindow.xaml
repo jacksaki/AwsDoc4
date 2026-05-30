@@ -1,0 +1,98 @@
+﻿<Window x:Class="AwsDoc4.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:v="clr-namespace:AwsDoc4.Views"
+        xmlns:vm="clr-namespace:AwsDoc4.ViewModels"
+        xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes"
+        v:DialogCloser.DialogResult="{Binding DialogResult}"
+        Width="360"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        SizeToContent="Height"
+        Title="AWS Login">
+
+    <Window.Resources>
+        <v:BoolToHiddenConverter x:Key="BoolToHiddenConverter"/>
+    </Window.Resources>
+
+    <Grid Margin="24">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Header -->
+            <RowDefinition Height="16"/>
+            <!-- Spacer -->
+            <RowDefinition Height="Auto"/>
+            <!-- Profile -->
+            <RowDefinition Height="56"/>
+            <!-- MFA固定領域 -->
+            <RowDefinition Height="16"/>
+            <!-- Spacer -->
+            <RowDefinition Height="Auto"/>
+            <!-- Buttons -->
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0">
+            <wpf:PackIcon Kind="Aws"
+                          Width="28"
+                          Height="28"
+                          Margin="0,0,8,0"/>
+            <TextBlock Text="AWS Login"
+                       VerticalAlignment="Center"
+                       FontSize="20"
+                       FontWeight="SemiBold"/>
+        </StackPanel>
+
+        <!-- Profile -->
+        <ComboBox Grid.Row="2"
+                  ItemsSource="{Binding ProfilesView}"
+                  SelectedItem="{Binding SelectedProfile.Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                  Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                  wpf:HintAssist.Hint="Profile"/>
+
+        <!-- MFA -->
+        <TextBox Grid.Row="3"
+                 VerticalAlignment="Top"
+                 Text="{Binding MFACode.Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                 wpf:HintAssist.Hint="Enter MFA Code"
+                 Visibility="{Binding NeedMFA.Value,
+                                      Converter={StaticResource BoolToHiddenConverter}}"/>
+
+        <!-- Buttons -->
+        <StackPanel Grid.Row="5"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+
+            <Button Width="110"
+                    Margin="0,0,8,0"
+                    Command="{Binding OKCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}">
+
+                <StackPanel Orientation="Horizontal">
+                    <wpf:PackIcon Kind="Login"
+                                  Width="18"
+                                  Height="18"
+                                  Margin="0,0,4,0"/>
+                    <TextBlock Text="Login"/>
+                </StackPanel>
+
+            </Button>
+
+            <Button Width="110"
+                    Command="{Binding CancelCommand}"
+                    Style="{StaticResource MaterialDesignOutlinedButton}">
+
+                <StackPanel Orientation="Horizontal">
+                    <wpf:PackIcon Kind="Cancel"
+                                  Width="18"
+                                  Height="18"
+                                  Margin="0,0,4,0"/>
+                    <TextBlock Text="Cancel"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>
