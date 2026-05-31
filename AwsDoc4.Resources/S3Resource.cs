@@ -6,6 +6,7 @@ using Amazon.S3.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
@@ -16,12 +17,19 @@ public class S3Resource : AwsResourceBase, IAwsResource<S3Resource>
     {
         return await AwsClientFactory.CreateAsync<AmazonS3Client>(profile).ConfigureAwait(false);
     }
+    public static bool HasCreateDate => true;
+
+    public static bool HasLastModified => false;
+
     private S3Resource(S3Bucket bucket) : base(bucket.BucketName, bucket.BucketArn, null)
     {
-        this.Created = bucket.CreationDate;
+        this.CreateDate = bucket.CreationDate;
     }
 
-    public static async IAsyncEnumerable<S3Resource> EnumerateResourceAsync(AwsProfile profile, string? queryString, [EnumeratorCancellation] CancellationToken ct = default)
+    public static async IAsyncEnumerable<S3Resource> EnumerateResourceAsync(
+        AwsProfile profile, 
+        EnumerateResourceRequest request, 
+        [EnumeratorCancellation] CancellationToken ct = default)
     {
         ct.ThrowIfCancellationRequested();
         var client = await GetClientAsync(profile).ConfigureAwait(false);
@@ -39,7 +47,8 @@ public class S3Resource : AwsResourceBase, IAwsResource<S3Resource>
             {
                 foreach (var bucket in response.Buckets)
                 {
-                    if (queryString != null && !bucket.BucketName.Contains(queryString, StringComparison.OrdinalIgnoreCase))
+                    if (request.QueryString != null && 
+                        !bucket.BucketName.Contains(request.QueryString, StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
                     }
@@ -75,19 +84,16 @@ public class S3Resource : AwsResourceBase, IAwsResource<S3Resource>
     }
 
     // --- 基本 ---
-    [PropertyDescription(1, "基本", 4, "リージョン", "バケットが配置されているリージョン")]
+    [PropertyDescription(1, "基本", 6, "リージョン", "バケットが配置されているリージョン")]
     public string? Region { get; private set; }
 
-    [PropertyDescription(1, "基本", 5, "S3 Uri", "S3 URI")]
+    [PropertyDescription(1, "基本", 7, "S3 Uri", "S3 URI")]
     public string? S3Uri => $"s3://{this.Name}/";
 
-    [PropertyDescription(1, "基本", 6, "作成日時", "作成日時")]
-    public DateTime? Created { get; private set; }
-
-    [PropertyDescription(1, "基本", 7, "バージョニング状態", "オブジェクトのバージョニング設定")]
+    [PropertyDescription(1, "基本", 8, "バージョニング状態", "オブジェクトのバージョニング設定")]
     public string? VersioningStatus { get; private set; }
 
-    [PropertyDescription(1, "基本", 8, "MFA削除", "削除時にMFAが必要かどうか")]
+    [PropertyDescription(1, "基本", 9, "MFA削除", "削除時にMFAが必要かどうか")]
     public bool? MfaDeleteEnabled { get; private set; }
 
     // --- セキュリティ ---

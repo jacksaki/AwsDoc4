@@ -3,6 +3,7 @@ using Amazon.SimpleSystemsManagement.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
@@ -16,6 +17,9 @@ public class SsmResource : AwsResourceBase, IAwsResource<SsmResource>
             .CreateAsync<AmazonSimpleSystemsManagementClient>(profile)
             .ConfigureAwait(false);
     }
+    public static bool HasCreateDate => false;
+
+    public static bool HasLastModified => true;
 
     private SsmResource(ParameterMetadata parameter)
         : base(
@@ -25,12 +29,12 @@ public class SsmResource : AwsResourceBase, IAwsResource<SsmResource>
     {
         this.ParameterType = parameter.Type?.Value;
         this.Version = parameter.Version;
-        this.LastModifiedDate = parameter.LastModifiedDate;
+        this.LastModified = parameter.LastModifiedDate;
     }
 
     public static async IAsyncEnumerable<SsmResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -53,9 +57,9 @@ public class SsmResource : AwsResourceBase, IAwsResource<SsmResource>
             {
                 foreach (var parameter in response.Parameters)
                 {
-                    if (queryString != null &&
+                    if (request.QueryString != null &&
                         !parameter.Name.Contains(
-                            queryString,
+                            request.QueryString,
                             StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
@@ -72,17 +76,14 @@ public class SsmResource : AwsResourceBase, IAwsResource<SsmResource>
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "ParameterType", "Parameter Type")]
+    [PropertyDescription(1, "基本", 6, "ParameterType", "Parameter Type")]
     public string? ParameterType { get; private set; }
 
-    [PropertyDescription(1, "基本", 5, "Tier", "Tier")]
+    [PropertyDescription(1, "基本", 7, "Tier", "Tier")]
     public string? Tier { get; private set; }
 
-    [PropertyDescription(1, "基本", 6, "Version", "Version")]
+    [PropertyDescription(1, "基本", 8, "Version", "Version")]
     public long? Version { get; private set; }
-
-    [PropertyDescription(1, "基本", 7, "LastModifiedDate", "最終更新")]
-    public DateTime? LastModifiedDate { get; private set; }
 
     // --- Security ---
 
@@ -149,7 +150,7 @@ public class SsmResource : AwsResourceBase, IAwsResource<SsmResource>
             this.Version =
                 parameter.Version;
 
-            this.LastModifiedDate =
+            this.LastModified =
                 parameter.LastModifiedDate;
 
             this.KeyId =

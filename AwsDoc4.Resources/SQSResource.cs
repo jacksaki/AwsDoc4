@@ -5,6 +5,7 @@ using Amazon.SQS.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
@@ -18,6 +19,9 @@ public class SqsResource : AwsResourceBase, IAwsResource<SqsResource>
             .CreateAsync<AmazonSQSClient>(profile)
             .ConfigureAwait(false);
     }
+    public static bool HasCreateDate => false;
+
+    public static bool HasLastModified => false;
 
     private SqsResource(string queueUrl)
         : base(
@@ -30,7 +34,7 @@ public class SqsResource : AwsResourceBase, IAwsResource<SqsResource>
 
     public static async IAsyncEnumerable<SqsResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -50,9 +54,9 @@ public class SqsResource : AwsResourceBase, IAwsResource<SqsResource>
         {
             var queueName = GetQueueName(queueUrl);
 
-            if (queryString != null &&
+            if (request.QueryString != null &&
                 !queueName.Contains(
-                    queryString,
+                    request.QueryString,
                     StringComparison.OrdinalIgnoreCase))
             {
                 continue;
@@ -64,14 +68,11 @@ public class SqsResource : AwsResourceBase, IAwsResource<SqsResource>
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "QueueUrl", "Queue URL")]
+    [PropertyDescription(1, "基本", 6, "QueueUrl", "Queue URL")]
     public string? QueueUrl { get; }
 
-    [PropertyDescription(1, "基本", 5, "FifoQueue", "FIFO Queue")]
+    [PropertyDescription(1, "基本", 7, "FifoQueue", "FIFO Queue")]
     public bool? FifoQueue { get; private set; }
-
-    [PropertyDescription(1, "基本", 6, "CreatedTimestamp", "作成日時")]
-    public DateTime? CreatedTimestamp { get; private set; }
 
     // --- メッセージ ---
 
@@ -190,7 +191,7 @@ public class SqsResource : AwsResourceBase, IAwsResource<SqsResource>
             this.RedriveAllowPolicyJson =
                 GetJson(attrs, "RedriveAllowPolicy");
 
-            this.CreatedTimestamp =
+            this.CreateDate =
                 GetUnixTime(attrs, "CreatedTimestamp");
         });
     }

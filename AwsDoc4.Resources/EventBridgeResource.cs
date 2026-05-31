@@ -3,6 +3,7 @@ using Amazon.EventBridge.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
@@ -16,6 +17,9 @@ public class EventBridgeResource : AwsResourceBase, IAwsResource<EventBridgeReso
             .ConfigureAwait(false);
     }
 
+    public static bool HasCreateDate => false;
+
+    public static bool HasLastModified => false;
     private EventBridgeResource(Rule rule)
         : base(
             rule.Name,
@@ -29,7 +33,7 @@ public class EventBridgeResource : AwsResourceBase, IAwsResource<EventBridgeReso
 
     public static async IAsyncEnumerable<EventBridgeResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -52,9 +56,9 @@ public class EventBridgeResource : AwsResourceBase, IAwsResource<EventBridgeReso
             {
                 foreach (var rule in response.Rules)
                 {
-                    if (queryString != null &&
+                    if (request.QueryString != null &&
                         !rule.Name.Contains(
-                            queryString,
+                            request.QueryString,
                             StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
@@ -71,13 +75,13 @@ public class EventBridgeResource : AwsResourceBase, IAwsResource<EventBridgeReso
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "EventBusName", "Event Bus")]
+    [PropertyDescription(1, "基本", 6, "EventBusName", "Event Bus")]
     public string? EventBusName { get; private set; }
 
-    [PropertyDescription(1, "基本", 5, "State", "状態")]
+    [PropertyDescription(1, "基本", 7, "State", "状態")]
     public string? State { get; private set; }
 
-    [PropertyDescription(1, "基本", 6, "ScheduleExpression", "スケジュール")]
+    [PropertyDescription(1, "基本", 8, "ScheduleExpression", "スケジュール")]
     public string? ScheduleExpression { get; private set; }
 
     // --- イベント ---

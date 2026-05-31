@@ -3,6 +3,7 @@ using Amazon.RDS.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
@@ -16,6 +17,10 @@ public class RdsResource : AwsResourceBase, IAwsResource<RdsResource>
             .ConfigureAwait(false);
     }
 
+    public static bool HasCreateDate => true;
+
+    public static bool HasLastModified => false;
+
     private RdsResource(DBInstance db)
         : base(
             db.DBInstanceIdentifier,
@@ -27,11 +32,12 @@ public class RdsResource : AwsResourceBase, IAwsResource<RdsResource>
         this.EngineVersion = db.EngineVersion;
         this.DBInstanceClass = db.DBInstanceClass;
         this.DBClusterIdentifier = db.DBClusterIdentifier;
+        this.CreateDate = db.InstanceCreateTime;
     }
 
     public static async IAsyncEnumerable<RdsResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -54,9 +60,9 @@ public class RdsResource : AwsResourceBase, IAwsResource<RdsResource>
             {
                 foreach (var db in response.DBInstances)
                 {
-                    if (queryString != null &&
+                    if (request.QueryString != null &&
                         !db.DBInstanceIdentifier.Contains(
-                            queryString,
+                            request.QueryString,
                             StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
@@ -73,22 +79,22 @@ public class RdsResource : AwsResourceBase, IAwsResource<RdsResource>
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "DBInstanceIdentifier", "DB Instance")]
+    [PropertyDescription(1, "基本", 6, "DBInstanceIdentifier", "DB Instance")]
     public string? DBInstanceIdentifier { get; }
 
-    [PropertyDescription(1, "基本", 5, "Engine", "Engine")]
+    [PropertyDescription(1, "基本", 7, "Engine", "Engine")]
     public string? Engine { get; private set; }
 
-    [PropertyDescription(1, "基本", 6, "EngineVersion", "Engine Version")]
+    [PropertyDescription(1, "基本", 8, "EngineVersion", "Engine Version")]
     public string? EngineVersion { get; private set; }
 
-    [PropertyDescription(1, "基本", 7, "DBInstanceClass", "Instance Class")]
+    [PropertyDescription(1, "基本", 9, "DBInstanceClass", "Instance Class")]
     public string? DBInstanceClass { get; private set; }
 
-    [PropertyDescription(1, "基本", 8, "DBClusterIdentifier", "Cluster")]
+    [PropertyDescription(1, "基本", 10, "DBClusterIdentifier", "Cluster")]
     public string? DBClusterIdentifier { get; private set; }
 
-    [PropertyDescription(1, "基本", 9, "Status", "状態")]
+    [PropertyDescription(1, "基本", 11, "Status", "状態")]
     public string? Status { get; private set; }
 
     // --- 接続 ---

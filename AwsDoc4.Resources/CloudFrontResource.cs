@@ -15,6 +15,9 @@ public class CloudFrontResource : AwsResourceBase, IAwsResource<CloudFrontResour
             .CreateAsync<AmazonCloudFrontClient>(profile)
             .ConfigureAwait(false);
     }
+    public static bool HasCreateDate => false;
+
+    public static bool HasLastModified => true;
 
     private CloudFrontResource(DistributionSummary distribution)
         : base(
@@ -22,6 +25,7 @@ public class CloudFrontResource : AwsResourceBase, IAwsResource<CloudFrontResour
             distribution.ARN,
             distribution.DomainName)
     {
+        this.LastModified = distribution.LastModifiedTime;
         this.DistributionId = distribution.Id;
         this.Status = distribution.Status;
         this.DomainName = distribution.DomainName;
@@ -30,7 +34,7 @@ public class CloudFrontResource : AwsResourceBase, IAwsResource<CloudFrontResour
 
     public static async IAsyncEnumerable<CloudFrontResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -59,8 +63,8 @@ public class CloudFrontResource : AwsResourceBase, IAwsResource<CloudFrontResour
                         distribution.Id ??
                         string.Empty;
 
-                    if (queryString != null &&
-                        !name.Contains(queryString, StringComparison.OrdinalIgnoreCase))
+                    if (request.QueryString != null &&
+                        !name.Contains(request.QueryString, StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
                     }
@@ -76,16 +80,16 @@ public class CloudFrontResource : AwsResourceBase, IAwsResource<CloudFrontResour
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "DistributionId", "Distribution ID")]
+    [PropertyDescription(1, "基本", 6, "DistributionId", "Distribution ID")]
     public string? DistributionId { get; }
 
-    [PropertyDescription(1, "基本", 5, "Status", "デプロイ状態")]
+    [PropertyDescription(1, "基本", 7, "Status", "デプロイ状態")]
     public string? Status { get; private set; }
 
-    [PropertyDescription(1, "基本", 6, "DomainName", "CloudFrontドメイン")]
+    [PropertyDescription(1, "基本", 8, "DomainName", "CloudFrontドメイン")]
     public string? DomainName { get; }
 
-    [PropertyDescription(1, "基本", 7, "Enabled", "有効状態")]
+    [PropertyDescription(1, "基本", 9, "Enabled", "有効状態")]
     public bool Enabled { get; }
 
     // --- ルーティング ---

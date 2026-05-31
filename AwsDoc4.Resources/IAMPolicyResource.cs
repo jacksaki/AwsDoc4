@@ -4,6 +4,7 @@ using Amazon.IdentityManagement.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
@@ -17,6 +18,9 @@ public class IamPolicyResource : AwsResourceBase, IAwsResource<IamPolicyResource
             .CreateAsync<AmazonIdentityManagementServiceClient>(profile)
             .ConfigureAwait(false);
     }
+    public static bool HasCreateDate => true;
+
+    public static bool HasLastModified => true;
 
     private IamPolicyResource(ManagedPolicy policy)
         : base(
@@ -29,12 +33,12 @@ public class IamPolicyResource : AwsResourceBase, IAwsResource<IamPolicyResource
         this.DefaultVersionId = policy.DefaultVersionId;
         this.AttachmentCount = policy.AttachmentCount;
         this.CreateDate = policy.CreateDate;
-        this.UpdateDate = policy.UpdateDate;
+        this.LastModified = policy.UpdateDate;
     }
 
     public static async IAsyncEnumerable<IamPolicyResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -58,9 +62,9 @@ public class IamPolicyResource : AwsResourceBase, IAwsResource<IamPolicyResource
             {
                 foreach (var policy in response.Policies)
                 {
-                    if (queryString != null &&
+                    if (request.QueryString != null &&
                         !policy.PolicyName.Contains(
-                            queryString,
+                            request.QueryString,
                             StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
@@ -77,23 +81,17 @@ public class IamPolicyResource : AwsResourceBase, IAwsResource<IamPolicyResource
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "PolicyId", "Policy ID")]
+    [PropertyDescription(1, "基本", 6, "PolicyId", "Policy ID")]
     public string? PolicyId { get; }
 
-    [PropertyDescription(1, "基本", 5, "Path", "Path")]
+    [PropertyDescription(1, "基本", 7, "Path", "Path")]
     public string? Path { get; }
 
-    [PropertyDescription(1, "基本", 6, "DefaultVersionId", "デフォルトVersion")]
+    [PropertyDescription(1, "基本", 8, "DefaultVersionId", "デフォルトVersion")]
     public string? DefaultVersionId { get; }
 
-    [PropertyDescription(1, "基本", 7, "AttachmentCount", "アタッチ数")]
+    [PropertyDescription(1, "基本", 9, "AttachmentCount", "アタッチ数")]
     public int? AttachmentCount { get; }
-
-    [PropertyDescription(1, "基本", 8, "CreateDate", "作成日時")]
-    public DateTime? CreateDate { get; }
-
-    [PropertyDescription(1, "基本", 9, "UpdateDate", "更新日時")]
-    public DateTime? UpdateDate { get; }
 
     // --- Policy ---
 

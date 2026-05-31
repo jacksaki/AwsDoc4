@@ -1,13 +1,14 @@
 ﻿
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 namespace AwsDoc4.Services;
 
 public static class AwsResourceSearcher
 {
     public static async IAsyncEnumerable<AwsResourceBase> EnumerateResourceAsync(
         Type type,
-        string? query,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct = default)
     {
         var method = type.GetMethod(
@@ -19,7 +20,7 @@ public static class AwsResourceSearcher
             throw new InvalidOperationException($"{type.Name} does not have EnumerateResourceAsync");
         }
         var profile = App.GetService<IAwsProfileManager>()!.CurrentProfile;
-        var result = method.Invoke(null, new object?[] { profile, query, ct });
+        var result = method.Invoke(null, new object?[] { profile, request, ct });
 
         if (result is IAsyncEnumerable<object> asyncEnumerable)
         {

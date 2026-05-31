@@ -3,6 +3,7 @@ using Amazon.Runtime.CredentialManagement;
 using Amazon.SecurityToken;
 using Amazon.SecurityToken.Model;
 using System.Diagnostics;
+using ZLinq;
 using static AwsDoc4.Resources.AwsProfile;
 
 namespace AwsDoc4.Resources;

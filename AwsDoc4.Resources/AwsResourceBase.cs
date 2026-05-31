@@ -11,6 +11,11 @@ public abstract class AwsResourceBase
     public string Name { get; }
     [PropertyDescription(1, "基本", 3, "説明", "説明")]
     public string? Description { get; }
+    [PropertyDescription(1, "基本", 4, "作成日時", "作成日時")]
+    public DateTime? CreateDate { get; protected set; }
+    [PropertyDescription(1, "基本", 5, "最終更新日時", "最終更新日時")]
+    public DateTime? LastModified { get; protected set; }
+
     public string Type { get; }
     public bool IsLoaded { get; set; }
     private void RefreshCore()

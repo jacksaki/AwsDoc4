@@ -3,6 +3,7 @@ using Amazon.DynamoDBv2.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
@@ -15,15 +16,17 @@ public class DynamoDbResource : AwsResourceBase, IAwsResource<DynamoDbResource>
             .CreateAsync<AmazonDynamoDBClient>(profile)
             .ConfigureAwait(false);
     }
-
+    public static bool HasCreateDate => true;
+    public static bool HasLastModified => false;
     private DynamoDbResource(string tableName)
         : base(tableName, tableName, null)
     {
+
     }
 
     public static async IAsyncEnumerable<DynamoDbResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -46,9 +49,9 @@ public class DynamoDbResource : AwsResourceBase, IAwsResource<DynamoDbResource>
             {
                 foreach (var tableName in response.TableNames)
                 {
-                    if (queryString != null &&
+                    if (request.QueryString != null &&
                         !tableName.Contains(
-                            queryString,
+                            request.QueryString,
                             StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
@@ -66,20 +69,17 @@ public class DynamoDbResource : AwsResourceBase, IAwsResource<DynamoDbResource>
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "TableStatus", "テーブル状態")]
+    [PropertyDescription(1, "基本", 6, "TableStatus", "テーブル状態")]
     public string? TableStatus { get; private set; }
 
-    [PropertyDescription(1, "基本", 5, "BillingMode", "課金モード")]
+    [PropertyDescription(1, "基本", 7, "BillingMode", "課金モード")]
     public string? BillingMode { get; private set; }
 
-    [PropertyDescription(1, "基本", 6, "TableSizeBytes", "サイズ(Bytes)")]
+    [PropertyDescription(1, "基本", 8, "TableSizeBytes", "サイズ(Bytes)")]
     public long? TableSizeBytes { get; private set; }
 
-    [PropertyDescription(1, "基本", 7, "ItemCount", "アイテム数")]
+    [PropertyDescription(1, "基本", 9, "ItemCount", "アイテム数")]
     public long? ItemCount { get; private set; }
-
-    [PropertyDescription(1, "基本", 8, "CreationDateTime", "作成日時")]
-    public DateTime? CreationDateTime { get; private set; }
 
     // --- キー ---
 
@@ -165,7 +165,7 @@ public class DynamoDbResource : AwsResourceBase, IAwsResource<DynamoDbResource>
             this.ItemCount =
                 table.ItemCount;
 
-            this.CreationDateTime =
+            this.CreateDate =
                 table.CreationDateTime;
 
             this.BillingMode =

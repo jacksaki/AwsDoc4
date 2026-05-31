@@ -3,6 +3,7 @@ using Amazon.IdentityManagement.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
@@ -16,6 +17,9 @@ public class IamRoleResource : AwsResourceBase, IAwsResource<IamRoleResource>
             .CreateAsync<AmazonIdentityManagementServiceClient>(profile)
             .ConfigureAwait(false);
     }
+    public static bool HasCreateDate => true;
+
+    public static bool HasLastModified => false;
 
     private IamRoleResource(Role role)
         : base(
@@ -30,7 +34,7 @@ public class IamRoleResource : AwsResourceBase, IAwsResource<IamRoleResource>
 
     public static async IAsyncEnumerable<IamRoleResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -53,9 +57,9 @@ public class IamRoleResource : AwsResourceBase, IAwsResource<IamRoleResource>
             {
                 foreach (var role in response.Roles)
                 {
-                    if (queryString != null &&
+                    if (request.QueryString != null &&
                         !role.RoleName.Contains(
-                            queryString,
+                            request.QueryString,
                             StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
@@ -73,16 +77,13 @@ public class IamRoleResource : AwsResourceBase, IAwsResource<IamRoleResource>
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "RoleId", "Role ID")]
+    [PropertyDescription(1, "基本", 6, "RoleId", "Role ID")]
     public string? RoleId { get; }
 
-    [PropertyDescription(1, "基本", 5, "Path", "Path")]
+    [PropertyDescription(1, "基本", 7, "Path", "Path")]
     public string? Path { get; }
 
-    [PropertyDescription(1, "基本", 6, "CreateDate", "作成日時")]
-    public DateTime? CreateDate { get; }
-
-    [PropertyDescription(1, "基本", 7, "MaxSessionDuration", "最大セッション時間")]
+    [PropertyDescription(1, "基本", 8, "MaxSessionDuration", "最大セッション時間")]
     public int? MaxSessionDuration { get; private set; }
 
     // --- AssumeRole ---

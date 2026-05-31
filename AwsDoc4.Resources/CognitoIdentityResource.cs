@@ -3,6 +3,7 @@ using Amazon.CognitoIdentity.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
@@ -15,6 +16,9 @@ public class CognitoIdentityResource : AwsResourceBase, IAwsResource<CognitoIden
             .CreateAsync<AmazonCognitoIdentityClient>(profile)
             .ConfigureAwait(false);
     }
+    public static bool HasCreateDate => false;
+
+    public static bool HasLastModified => false;
 
     private CognitoIdentityResource(IdentityPoolShortDescription pool)
         : base(
@@ -27,7 +31,7 @@ public class CognitoIdentityResource : AwsResourceBase, IAwsResource<CognitoIden
 
     public static async IAsyncEnumerable<CognitoIdentityResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -50,9 +54,9 @@ public class CognitoIdentityResource : AwsResourceBase, IAwsResource<CognitoIden
             {
                 foreach (var pool in response.IdentityPools)
                 {
-                    if (queryString != null &&
+                    if (request.QueryString != null &&
                         !pool.IdentityPoolName.Contains(
-                            queryString,
+                            request.QueryString,
                             StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
@@ -69,13 +73,13 @@ public class CognitoIdentityResource : AwsResourceBase, IAwsResource<CognitoIden
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "IdentityPoolId", "Identity Pool ID")]
+    [PropertyDescription(1, "基本", 6, "IdentityPoolId", "Identity Pool ID")]
     public string? IdentityPoolId { get; }
 
-    [PropertyDescription(1, "基本", 5, "AllowUnauthenticatedIdentities", "未認証許可")]
+    [PropertyDescription(1, "基本", 7, "AllowUnauthenticatedIdentities", "未認証許可")]
     public bool AllowUnauthenticatedIdentities { get; private set; }
 
-    [PropertyDescription(1, "基本", 6, "AllowClassicFlow", "Classic Flow")]
+    [PropertyDescription(1, "基本", 8, "AllowClassicFlow", "Classic Flow")]
     public bool AllowClassicFlow { get; private set; }
 
     // --- 認証プロバイダ ---

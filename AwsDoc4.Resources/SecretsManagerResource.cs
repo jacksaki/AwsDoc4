@@ -3,6 +3,7 @@ using Amazon.SecretsManager.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
@@ -17,20 +18,25 @@ public class SecretsManagerResource : AwsResourceBase, IAwsResource<SecretsManag
             .ConfigureAwait(false);
     }
 
+    public static bool HasCreateDate => true;
+
+    public static bool HasLastModified => true;
+
     private SecretsManagerResource(SecretListEntry secret)
         : base(
             secret.Name,
             secret.ARN,
             secret.Description)
     {
+        this.CreateDate = secret.CreatedDate;
         this.SecretId = secret.Name;
         this.PrimaryRegion = secret.PrimaryRegion;
-        this.LastChangedDate = secret.LastChangedDate;
+        this.LastModified = secret.LastChangedDate;
     }
 
     public static async IAsyncEnumerable<SecretsManagerResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -53,9 +59,9 @@ public class SecretsManagerResource : AwsResourceBase, IAwsResource<SecretsManag
             {
                 foreach (var secret in response.SecretList)
                 {
-                    if (queryString != null &&
+                    if (request.QueryString != null &&
                         !secret.Name.Contains(
-                            queryString,
+                            request.QueryString,
                             StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
@@ -72,16 +78,13 @@ public class SecretsManagerResource : AwsResourceBase, IAwsResource<SecretsManag
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "SecretId", "Secret Name")]
+    [PropertyDescription(1, "基本", 6, "SecretId", "Secret Name")]
     public string? SecretId { get; }
 
-    [PropertyDescription(1, "基本", 5, "PrimaryRegion", "Primary Region")]
+    [PropertyDescription(1, "基本", 7, "PrimaryRegion", "Primary Region")]
     public string? PrimaryRegion { get; private set; }
 
-    [PropertyDescription(1, "基本", 6, "LastChangedDate", "最終更新")]
-    public DateTime? LastChangedDate { get; private set; }
-
-    [PropertyDescription(1, "基本", 7, "LastAccessedDate", "最終アクセス")]
+    [PropertyDescription(1, "基本", 8, "LastAccessedDate", "最終アクセス")]
     public DateTime? LastAccessedDate { get; private set; }
 
     // --- Rotation ---
@@ -142,7 +145,7 @@ public class SecretsManagerResource : AwsResourceBase, IAwsResource<SecretsManag
             this.PrimaryRegion =
                 res.PrimaryRegion;
 
-            this.LastChangedDate =
+            this.LastModified =
                 res.LastChangedDate;
 
             this.LastAccessedDate =

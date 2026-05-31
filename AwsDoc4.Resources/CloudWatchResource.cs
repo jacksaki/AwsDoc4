@@ -3,6 +3,7 @@ using Amazon.CloudWatch.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
@@ -16,12 +17,17 @@ public class CloudWatchResource : AwsResourceBase, IAwsResource<CloudWatchResour
             .ConfigureAwait(false);
     }
 
+    public static bool HasCreateDate => false;
+
+    public static bool HasLastModified => true;
+
     private CloudWatchResource(MetricAlarm alarm)
         : base(
             alarm.AlarmName,
             alarm.AlarmArn,
             alarm.AlarmDescription)
     {
+        this.LastModified = alarm.AlarmConfigurationUpdatedTimestamp;
         this.StateValue = alarm.StateValue?.Value;
         this.Namespace = alarm.Namespace;
         this.MetricName = alarm.MetricName;
@@ -29,7 +35,7 @@ public class CloudWatchResource : AwsResourceBase, IAwsResource<CloudWatchResour
 
     public static async IAsyncEnumerable<CloudWatchResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -52,8 +58,8 @@ public class CloudWatchResource : AwsResourceBase, IAwsResource<CloudWatchResour
             {
                 foreach (var alarm in response.MetricAlarms)
                 {
-                    if (queryString != null &&
-                        !alarm.AlarmName.Contains(queryString, StringComparison.OrdinalIgnoreCase))
+                    if (request.QueryString != null &&
+                        !alarm.AlarmName.Contains(request.QueryString, StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
                     }
@@ -69,13 +75,13 @@ public class CloudWatchResource : AwsResourceBase, IAwsResource<CloudWatchResour
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "State", "現在状態")]
+    [PropertyDescription(1, "基本", 6, "State", "現在状態")]
     public string? StateValue { get; private set; }
 
-    [PropertyDescription(1, "基本", 5, "Namespace", "メトリクスNamespace")]
+    [PropertyDescription(1, "基本", 7, "Namespace", "メトリクスNamespace")]
     public string? Namespace { get; private set; }
 
-    [PropertyDescription(1, "基本", 6, "MetricName", "メトリクス名")]
+    [PropertyDescription(1, "基本", 8, "MetricName", "メトリクス名")]
     public string? MetricName { get; private set; }
 
     // --- 条件 ---

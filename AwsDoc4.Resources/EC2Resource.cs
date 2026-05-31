@@ -3,11 +3,12 @@ using Amazon.EC2.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
 [AwsResource("EC2")]
-public class Ec2Resource : AwsResourceBase, IAwsResource<Ec2Resource>
+public class EC2Resource : AwsResourceBase, IAwsResource<EC2Resource>
 {
     private static async Task<AmazonEC2Client> GetClientAsync(AwsProfile profile)
     {
@@ -15,8 +16,11 @@ public class Ec2Resource : AwsResourceBase, IAwsResource<Ec2Resource>
             .CreateAsync<AmazonEC2Client>(profile)
             .ConfigureAwait(false);
     }
+    public static bool HasCreateDate => false;
 
-    private Ec2Resource(Instance instance)
+    public static bool HasLastModified => false;
+
+    private EC2Resource(Instance instance)
         : base(
             GetInstanceName(instance) ?? instance.InstanceId,
             instance.InstanceId,
@@ -29,9 +33,9 @@ public class Ec2Resource : AwsResourceBase, IAwsResource<Ec2Resource>
         this.PublicIpAddress = instance.PublicIpAddress;
     }
 
-    public static async IAsyncEnumerable<Ec2Resource> EnumerateResourceAsync(
+    public static async IAsyncEnumerable<EC2Resource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -60,15 +64,15 @@ public class Ec2Resource : AwsResourceBase, IAwsResource<Ec2Resource>
                             GetInstanceName(instance)
                             ?? instance.InstanceId;
 
-                        if (queryString != null &&
+                        if (request.QueryString != null &&
                             !name.Contains(
-                                queryString,
+                                request.QueryString,
                                 StringComparison.OrdinalIgnoreCase))
                         {
                             continue;
                         }
 
-                        yield return new Ec2Resource(instance);
+                        yield return new EC2Resource(instance);
                     }
                 }
             }
@@ -80,22 +84,22 @@ public class Ec2Resource : AwsResourceBase, IAwsResource<Ec2Resource>
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "InstanceId", "インスタンスID")]
+    [PropertyDescription(1, "基本", 6, "InstanceId", "インスタンスID")]
     public string? InstanceId { get; }
 
-    [PropertyDescription(1, "基本", 5, "State", "状態")]
+    [PropertyDescription(1, "基本", 7, "State", "状態")]
     public string? State { get; private set; }
 
-    [PropertyDescription(1, "基本", 6, "InstanceType", "インスタンスタイプ")]
+    [PropertyDescription(1, "基本", 8, "InstanceType", "インスタンスタイプ")]
     public string? InstanceType { get; private set; }
 
-    [PropertyDescription(1, "基本", 7, "ImageId", "AMI ID")]
+    [PropertyDescription(1, "基本", 9, "ImageId", "AMI ID")]
     public string? ImageId { get; private set; }
 
-    [PropertyDescription(1, "基本", 8, "PlatformDetails", "OS")]
+    [PropertyDescription(1, "基本", 10, "PlatformDetails", "OS")]
     public string? PlatformDetails { get; private set; }
 
-    [PropertyDescription(1, "基本", 9, "LaunchTime", "起動日時")]
+    [PropertyDescription(1, "基本", 11, "LaunchTime", "起動日時")]
     public DateTime? LaunchTime { get; private set; }
 
     // --- Network ---

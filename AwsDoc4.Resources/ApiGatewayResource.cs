@@ -3,12 +3,17 @@ using Amazon.ApiGatewayV2.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
 [AwsResource("API Gateway")]
 public class ApiGatewayResource : AwsResourceBase, IAwsResource<ApiGatewayResource>
 {
+    public static bool HasCreateDate => true;
+
+    public static bool HasLastModified => false;
+
     private static async Task<AmazonApiGatewayV2Client> GetClientAsync(AwsProfile profile)
     {
         return await AwsClientFactory
@@ -23,12 +28,12 @@ public class ApiGatewayResource : AwsResourceBase, IAwsResource<ApiGatewayResour
     {
         this.ProtocolType = api.ProtocolType;
         this.ApiEndpoint = api.ApiEndpoint;
+        this.CreateDate = api.CreatedDate;
     }
 
     public static async IAsyncEnumerable<ApiGatewayResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
-        [EnumeratorCancellation] CancellationToken ct)
+EnumerateResourceRequest request, [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
 
@@ -50,12 +55,12 @@ public class ApiGatewayResource : AwsResourceBase, IAwsResource<ApiGatewayResour
             {
                 foreach (var api in response.Items)
                 {
-                    if (queryString != null &&
-                        !api.Name.Contains(queryString, StringComparison.OrdinalIgnoreCase))
+                    if (request.QueryString != null &&
+                        !api.Name.Contains(request.QueryString, StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
                     }
-
+                    // api.CreatedDate
                     yield return new ApiGatewayResource(api);
                 }
             }
@@ -67,10 +72,10 @@ public class ApiGatewayResource : AwsResourceBase, IAwsResource<ApiGatewayResour
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "ProtocolType", "HTTP / WEBSOCKET")]
+    [PropertyDescription(1, "基本", 6, "ProtocolType", "HTTP / WEBSOCKET")]
     public string? ProtocolType { get; }
 
-    [PropertyDescription(1, "基本", 5, "Endpoint", "API Endpoint")]
+    [PropertyDescription(1, "基本", 7, "Endpoint", "API Endpoint")]
     public string? ApiEndpoint { get; }
 
     // --- ルーティング ---

@@ -6,6 +6,7 @@ using Amazon.Lambda.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
@@ -16,12 +17,17 @@ public class LambdaResource : AwsResourceBase, IAwsResource<LambdaResource>
     {
         return await AwsClientFactory.CreateAsync<AmazonLambdaClient>(profile).ConfigureAwait(false);
     }
+
+    public static bool HasCreateDate => false;
+
+    public static bool HasLastModified => true;
+
     private LambdaResource(FunctionConfiguration lambda) : base(lambda.FunctionName, lambda.FunctionArn, lambda.Description)
     {
         this.LastModified = lambda.LastModified.ToDateTimeN();
     }
 
-    public static async IAsyncEnumerable<LambdaResource> EnumerateResourceAsync(AwsProfile profile, string? queryString, [EnumeratorCancellation] CancellationToken ct)
+    public static async IAsyncEnumerable<LambdaResource> EnumerateResourceAsync(AwsProfile profile, EnumerateResourceRequest request, [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
         var client = await GetClientAsync(profile).ConfigureAwait(false);
@@ -38,7 +44,9 @@ public class LambdaResource : AwsResourceBase, IAwsResource<LambdaResource>
             {
                 foreach (var function in response.Functions)
                 {
-                    if (queryString != null && !function.FunctionName.Contains(queryString, StringComparison.OrdinalIgnoreCase))
+                    if (request.QueryString != null && 
+                        !function.FunctionName.Contains(
+                            request.QueryString, StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
                     }
@@ -51,14 +59,10 @@ public class LambdaResource : AwsResourceBase, IAwsResource<LambdaResource>
         } while (!string.IsNullOrEmpty(marker));
     }
 
-    [PropertyDescription(1, "基本", 4, "最終更新日時", "最終更新日時")]
-    public DateTime? LastModified { get; }
-
-
-    [PropertyDescription(1, "基本", 5, "ランタイム", "使用ランタイム")]
+    [PropertyDescription(1, "基本", 6, "ランタイム", "使用ランタイム")]
     public string? Runtime { get; private set; }
 
-    [PropertyDescription(1, "基本", 6, "ハンドラ", "エントリポイント")]
+    [PropertyDescription(1, "基本", 7, "ハンドラ", "エントリポイント")]
     public string? Handler { get; private set; }
 
     // --- セキュリティ ---

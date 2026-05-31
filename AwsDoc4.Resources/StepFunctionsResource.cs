@@ -3,6 +3,7 @@ using Amazon.StepFunctions.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
@@ -16,6 +17,9 @@ public class StepFunctionsResource : AwsResourceBase, IAwsResource<StepFunctions
             .CreateAsync<AmazonStepFunctionsClient>(profile)
             .ConfigureAwait(false);
     }
+    public static bool HasCreateDate => true;
+
+    public static bool HasLastModified => true;
 
     private StepFunctionsResource(StateMachineListItem stateMachine)
         : base(
@@ -24,12 +28,12 @@ public class StepFunctionsResource : AwsResourceBase, IAwsResource<StepFunctions
             null)
     {
         this.StateMachineType = stateMachine.Type?.Value;
-        this.CreationDate = stateMachine.CreationDate;
+        this.CreateDate = stateMachine.CreationDate;
     }
 
     public static async IAsyncEnumerable<StepFunctionsResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -52,9 +56,9 @@ public class StepFunctionsResource : AwsResourceBase, IAwsResource<StepFunctions
             {
                 foreach (var stateMachine in response.StateMachines)
                 {
-                    if (queryString != null &&
+                    if (request.QueryString != null &&
                         !stateMachine.Name.Contains(
-                            queryString,
+                            request.QueryString,
                             StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
@@ -71,14 +75,11 @@ public class StepFunctionsResource : AwsResourceBase, IAwsResource<StepFunctions
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "StateMachineType", "Type")]
+    [PropertyDescription(1, "基本", 6, "StateMachineType", "Type")]
     public string? StateMachineType { get; private set; }
 
-    [PropertyDescription(1, "基本", 5, "Status", "状態")]
+    [PropertyDescription(1, "基本", 7, "Status", "状態")]
     public string? Status { get; private set; }
-
-    [PropertyDescription(1, "基本", 6, "CreationDate", "作成日時")]
-    public DateTime? CreationDate { get; private set; }
 
     // --- Workflow ---
 

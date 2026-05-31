@@ -3,12 +3,17 @@ using Amazon.AppSync.Model;
 using AwsDoc4.Resources;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
+using ZLinq;
 
 namespace AwsDoc4.Resources;
 
 [AwsResource("AppSync")]
 public class AppSyncResource : AwsResourceBase, IAwsResource<AppSyncResource>
 {
+    public static bool HasCreateDate => false;
+
+    public static bool HasLastModified => false;
+
     private static async Task<AmazonAppSyncClient> GetClientAsync(AwsProfile profile)
     {
         return await AwsClientFactory
@@ -26,7 +31,7 @@ public class AppSyncResource : AwsResourceBase, IAwsResource<AppSyncResource>
 
     public static async IAsyncEnumerable<AppSyncResource> EnumerateResourceAsync(
         AwsProfile profile,
-        string? queryString,
+        EnumerateResourceRequest request,
         [EnumeratorCancellation] CancellationToken ct)
     {
         ct.ThrowIfCancellationRequested();
@@ -49,8 +54,8 @@ public class AppSyncResource : AwsResourceBase, IAwsResource<AppSyncResource>
             {
                 foreach (var api in response.GraphqlApis)
                 {
-                    if (queryString != null &&
-                        !api.Name.Contains(queryString, StringComparison.OrdinalIgnoreCase))
+                    if (request.QueryString != null &&
+                        !api.Name.Contains(request.QueryString, StringComparison.OrdinalIgnoreCase))
                     {
                         continue;
                     }
@@ -66,13 +71,13 @@ public class AppSyncResource : AwsResourceBase, IAwsResource<AppSyncResource>
 
     // --- 基本 ---
 
-    [PropertyDescription(1, "基本", 4, "ApiId", "GraphQL API ID")]
+    [PropertyDescription(1, "基本", 6, "ApiId", "GraphQL API ID")]
     public string? ApiId { get; }
 
-    [PropertyDescription(1, "基本", 5, "AuthenticationType", "認証方式")]
+    [PropertyDescription(1, "基本", 7, "AuthenticationType", "認証方式")]
     public string? AuthenticationType { get; }
 
-    [PropertyDescription(1, "基本", 6, "Uris", "GraphQL Endpoint")]
+    [PropertyDescription(1, "基本", 8, "Uris", "GraphQL Endpoint")]
     public JsonDocument? UrisJson { get; }
 
     // --- セキュリティ ---

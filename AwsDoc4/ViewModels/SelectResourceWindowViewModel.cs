@@ -2,17 +2,28 @@
 using AwsDoc4.Services;
 using ObservableCollections;
 using R3;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 using System.Windows.Input;
+using ZLinq;
 
 namespace AwsDoc4.ViewModels;
 
+public class ResourceTypeState
+{
+    public ResourceTypeState(Type t)
+    {
+        this.AwsResourceType = t;
+        this.HasCreateDate = (bool?)t.GetProperty("HasCreateDate")?.GetValue(null) == true;
+        this.HasLastModified = (bool?)t.GetProperty("HasLastModified")?.GetValue(null) == true;
+    }
+
+    public Type AwsResourceType { get; }
+    public bool HasCreateDate { get; }
+    public bool HasLastModified { get; }
+}
 public class SelectResourceWindowViewModel:BoxViewModelBase
 {
-    private Dictionary<string, Type> _resourceTypes;
+    private Dictionary<string, ResourceTypeState> _resourceTypes;
     public List<string> Types { get; }
     public bool? DialogResult { get; set; }
     public BindableReactiveProperty<string> SelectedType { get; }
@@ -24,16 +35,36 @@ public class SelectResourceWindowViewModel:BoxViewModelBase
 
     public BindableReactiveProperty<AwsResourceBase> SelectedResource { get; }
     public ReactiveCommand<AwsResourceBase> SelectResourceCommand { get; }
+    public BindableReactiveProperty<bool> ShowCreateDate { get; }
+    public BindableReactiveProperty<bool> ShowLastModified { get; }
 
     public SelectResourceWindowViewModel() : base()
     {
-        _resourceTypes = typeof(AwsResourceBase).Assembly.GetTypes().Where(x =>
+        _resourceTypes = typeof(AwsResourceBase).Assembly.GetTypes().AsValueEnumerable().Where(x =>
             x.IsSubclassOf(typeof(AwsResourceBase)) &&
             x.GetCustomAttribute<AwsResourceAttribute>() != null
-            ).ToDictionary(x => x.GetCustomAttribute<AwsResourceAttribute>()!.Type, y => y);
+            ).ToDictionary(
+                x => x.GetCustomAttribute<AwsResourceAttribute>()!.Type,
+                y => new ResourceTypeState(y));
 
-        this.Types = _resourceTypes.Select(x => x.Key).ToList();
+        this.Types = _resourceTypes.AsValueEnumerable().Select(x => x.Key).ToList();
         this.SelectedType = new BindableReactiveProperty<string>();
+        this.ShowCreateDate = new BindableReactiveProperty<bool>();
+        this.ShowLastModified = new BindableReactiveProperty<bool>();
+        this.SelectedType.Subscribe(x =>
+        {
+            if (string.IsNullOrEmpty(x))
+            {
+                this.ShowCreateDate.Value = false;
+                this.ShowLastModified.Value = false;
+            }
+            else
+            {
+                this.ShowCreateDate.Value = _resourceTypes.TryGetValue(x, out var vc) ? vc.HasCreateDate : false;
+                this.ShowLastModified.Value = _resourceTypes.TryGetValue(x, out var vl) ? vl.HasLastModified : false;
+            }
+        });
+
         this.RefreshResourcesCommand = new ReactiveCommand<string>();
         this.SearchString = new BindableReactiveProperty<string>();
         this.Resources = new ObservableList<AwsResourceBase>();
@@ -52,7 +83,11 @@ public class SelectResourceWindowViewModel:BoxViewModelBase
                 {
                     return;
                 }
-                await foreach (var resource in AwsResourceSearcher.EnumerateResourceAsync(t, this.SearchString.Value, ct))
+                var req = new EnumerateResourceRequest()
+                {
+                    QueryString = this.SearchString.Value
+                };
+                await foreach (var resource in AwsResourceSearcher.EnumerateResourceAsync(t.AwsResourceType, req, ct))
                 {
                     this.Resources.Add(resource);
                 }
