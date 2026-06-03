@@ -1,4 +1,21 @@
 <Solution>
+  <Project Path="AwsDoc4.ApiGateway/AwsDoc4.ApiGateway.csproj" Id="64424383-9429-48ab-a34d-5143ab520f32" />
+  <Project Path="AwsDoc4.AppSync/AwsDoc4.AppSync.csproj" Id="e9e3e45b-bc69-4990-bbc2-00ca8311ec33" />
+  <Project Path="AwsDoc4.CloudFront/AwsDoc4.CloudFront.csproj" Id="dc230486-aeaf-44c9-9b22-9328f754cc90" />
+  <Project Path="AwsDoc4.CloudWatch/AwsDoc4.CloudWatch.csproj" Id="36a6dfb9-dc57-45e7-9952-0bbfdb07cf77" />
+  <Project Path="AwsDoc4.CognitoIdentity/AwsDoc4.CognitoIdentity.csproj" Id="5c772e2b-091a-4b02-8a61-71667e324934" />
+  <Project Path="AwsDoc4.DynamoDB/AwsDoc4.DynamoDB.csproj" Id="5b133fe6-4c16-4fb9-a260-115e9bca6d9b" />
+  <Project Path="AwsDoc4.EC2/AwsDoc4.EC2.csproj" Id="25547b85-d646-4f4b-aa6e-15274d852db6" />
+  <Project Path="AwsDoc4.EventBridge/AwsDoc4.EventBridge.csproj" Id="0dbb397d-37dd-4a6d-b6c1-4c1dbbcf5909" />
+  <Project Path="AwsDoc4.IAM/AwsDoc4.IAM.csproj" Id="38f12df5-9475-4254-b92e-1baf9ac7c64e" />
+  <Project Path="AwsDoc4.Lambda/AwsDoc4.Lambda.csproj" Id="de8e5c93-7b08-4dcb-a6c9-78f9e14a571a" />
+  <Project Path="AwsDoc4.RDS/AwsDoc4.RDS.csproj" Id="007fef6a-d2eb-4c6b-ba5e-589576958f36" />
   <Project Path="AwsDoc4.Resources/AwsDoc4.Resources.csproj" />
+  <Project Path="AwsDoc4.S3/AwsDoc4.S3.csproj" Id="7695e886-6d7a-4515-89f0-ea219cd96b1d" />
+  <Project Path="AwsDoc4.SecretsManager/AwsDoc4.SecretsManager.csproj" Id="aa251727-eb12-43de-91a9-5611a51a78d5" />
+  <Project Path="AwsDoc4.SQS/AwsDoc4.SQS.csproj" Id="b2cdce56-6b9d-4105-9e86-deca2842cf32" />
+  <Project Path="AwsDoc4.SSM/AwsDoc4.SSM.csproj" Id="7f216810-088c-4c95-a075-764333d20ce9" />
+  <Project Path="AwsDoc4.StepFunctions/AwsDoc4.StepFunctions.csproj" Id="389c9630-bd45-4cf2-ab16-4141de4fffb6" />
   <Project Path="AwsDoc4/AwsDoc4.csproj" Id="ba4f1230-4ad2-4947-8f18-509ba6d290e3" />
+  <Project Path="AwsDoc4Cmd/AwsDoc4Cmd.csproj" Id="b17b8ef9-2b62-40b0-8e2e-d9ed2a0c0015" />
 </Solution>

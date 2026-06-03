@@ -50,13 +50,11 @@ public class SummaryBoxViewModel:BoxViewModelBase
         this.ExecuteCommand = new ReactiveCommand();
         this.AddResourceCommand.Subscribe(_ =>
         {
-            var vm = App.GetService<SelectResourceWindowViewModel>()!;
             var window = App.GetService<SelectResourceWindow>()!;
-            window.DataContext = vm;
             if (window.ShowDialog()==true)
             {
                 var viewModel = App.GetService<AwsResourceViewModel>() !;
-                viewModel.Resource.Value = vm.SelectedResource.Value;
+                viewModel.Resource.Value = ((SelectResourceWindowViewModel)(window.DataContext)).SelectedResource.Value;
                 this.Resources.Add(viewModel);
             }
         });

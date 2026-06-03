@@ -1,4 +1,5 @@
-﻿<Window x:Class="AwsDoc4.Views.SelectResourceWindow"
+﻿<mahApps:MetroWindow
+    x:Class="AwsDoc4.Views.SelectResourceWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         v:DialogCloser.DialogResult="{Binding DialogResult}"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -10,8 +11,9 @@
     xmlns:vm="clr-namespace:AwsDoc4.ViewModels"
     Background="{DynamicResource MaterialDesignPaper}"
     BorderThickness="1"
-    FontFamily="pack:application,,,/MaterialDesignThemes.Wpf;conponent/Resources/Roboto/#Roboto"
+    GlowBrush="{DynamicResource AccentColorBrush}"
     Style="{StaticResource MaterialDesignWindow}"
+    FontFamily="pack:application,,,/MaterialDesignThemes.Wpf;conponent/Resources/Roboto/#Roboto"
     TextElement.FontSize="16"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         TextElement.FontWeight="Regular"
@@ -61,4 +63,4 @@
             </Grid>
         </GroupBox>
     </Grid>
-</Window>
+</mahApps:MetroWindow>

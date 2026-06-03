@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="AWSSDK.SQS" Version="4.0.2.32" />
+		<PackageReference Include="AWSSDK.Lambda" Version="4.0.15.6" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\AwsDoc4.Resources\AwsDoc4.Resources.csproj" />
+	</ItemGroup>
+
+</Project>

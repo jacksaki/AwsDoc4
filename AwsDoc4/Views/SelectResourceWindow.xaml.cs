@@ -17,11 +17,12 @@ namespace AwsDoc4.Views
     /// <summary>
     /// SelectResourceWindow.xaml の相互作用ロジック
     /// </summary>
-    public partial class SelectResourceWindow : Window
+    public partial class SelectResourceWindow : MahApps.Metro.Controls.MetroWindow
     {
         public SelectResourceWindow()
         {
             InitializeComponent();
+            this.DataContext = App.GetService<SelectResourceWindowViewModel>();
         }
     }
 }

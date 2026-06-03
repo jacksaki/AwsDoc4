@@ -32,7 +32,6 @@ public class SelectResourceWindowViewModel:BoxViewModelBase
     public ObservableList<AwsResourceBase> Resources { get; }
     public ISynchronizedView<AwsResourceBase, AwsResourceBase> ResourcesView { get; }
     public NotifyCollectionChangedSynchronizedViewList<AwsResourceBase> FilteredView { get; }
-
     public BindableReactiveProperty<AwsResourceBase> SelectedResource { get; }
     public ReactiveCommand<AwsResourceBase> SelectResourceCommand { get; }
     public BindableReactiveProperty<bool> ShowCreateDate { get; }
@@ -40,12 +39,7 @@ public class SelectResourceWindowViewModel:BoxViewModelBase
 
     public SelectResourceWindowViewModel() : base()
     {
-        _resourceTypes = typeof(AwsResourceBase).Assembly.GetTypes().AsValueEnumerable().Where(x =>
-            x.IsSubclassOf(typeof(AwsResourceBase)) &&
-            x.GetCustomAttribute<AwsResourceAttribute>() != null
-            ).ToDictionary(
-                x => x.GetCustomAttribute<AwsResourceAttribute>()!.Type,
-                y => new ResourceTypeState(y));
+        _resourceTypes = AwsResourceProvider.GetAll();
 
         this.Types = _resourceTypes.AsValueEnumerable().Select(x => x.Key).ToList();
         this.SelectedType = new BindableReactiveProperty<string>();

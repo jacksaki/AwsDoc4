@@ -1,5 +1,4 @@
 ﻿using Amazon;
-using Amazon.IdentityManagement;
 using Amazon.Runtime;
 
 namespace AwsDoc4.Resources;
@@ -11,14 +10,5 @@ public static class AwsClientFactory
         await profile.EnsureConnectedAsync();
         var ctor = typeof(T).GetConstructor(new Type[] { typeof(AWSCredentials) });
         return (T)ctor!.Invoke(new object[] { profile.Credentials! });
-    }
-
-    private static ClientConfig CreateConfig<T>(RegionEndpoint region)
-        where T : AmazonServiceClient
-    {
-        return new AmazonIdentityManagementServiceConfig
-        {
-            RegionEndpoint = region,
-        };
     }
 }
