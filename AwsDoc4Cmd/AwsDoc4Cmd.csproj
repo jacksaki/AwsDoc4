@@ -12,7 +12,28 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="JsonPath.Net" Version="3.0.2" />
     <PackageReference Include="Kokuban" Version="0.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AwsDoc4.ApiGateway\AwsDoc4.ApiGateway.csproj" />
+    <ProjectReference Include="..\AwsDoc4.AppSync\AwsDoc4.AppSync.csproj" />
+    <ProjectReference Include="..\AwsDoc4.CloudFront\AwsDoc4.CloudFront.csproj" />
+    <ProjectReference Include="..\AwsDoc4.CloudWatch\AwsDoc4.CloudWatch.csproj" />
+    <ProjectReference Include="..\AwsDoc4.CognitoIdentity\AwsDoc4.CognitoIdentity.csproj" />
+    <ProjectReference Include="..\AwsDoc4.DynamoDB\AwsDoc4.DynamoDB.csproj" />
+    <ProjectReference Include="..\AwsDoc4.EC2\AwsDoc4.EC2.csproj" />
+    <ProjectReference Include="..\AwsDoc4.EventBridge\AwsDoc4.EventBridge.csproj" />
+    <ProjectReference Include="..\AwsDoc4.IAM\AwsDoc4.IAM.csproj" />
+    <ProjectReference Include="..\AwsDoc4.Lambda\AwsDoc4.Lambda.csproj" />
+    <ProjectReference Include="..\AwsDoc4.RDS\AwsDoc4.RDS.csproj" />
+    <ProjectReference Include="..\AwsDoc4.Resources\AwsDoc4.Resources.csproj" />
+    <ProjectReference Include="..\AwsDoc4.S3\AwsDoc4.S3.csproj" />
+    <ProjectReference Include="..\AwsDoc4.SecretsManager\AwsDoc4.SecretsManager.csproj" />
+    <ProjectReference Include="..\AwsDoc4.SQS\AwsDoc4.SQS.csproj" />
+    <ProjectReference Include="..\AwsDoc4.SSM\AwsDoc4.SSM.csproj" />
+    <ProjectReference Include="..\AwsDoc4.StepFunctions\AwsDoc4.StepFunctions.csproj" />
   </ItemGroup>
 
 </Project>

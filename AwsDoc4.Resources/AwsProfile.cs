@@ -143,6 +143,15 @@ public class AwsProfile
         //
         if (this.NeedAssumeRole)
         {
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             var response = await sts.AssumeRoleAsync(
                 new AssumeRoleRequest
                 {
@@ -180,6 +189,12 @@ public class AwsProfile
 
         this.Expiration = responseCredentials.Expiration;
         this._mfaProvider = mfaProvider;
+    }
+
+    public static AwsProfile? GetProfileFromName(string profileName)
+    {
+        var file = new SharedCredentialsFile();
+        return file.TryGetProfile(profileName, out var profile) ? new AwsProfile(profile) : null;
     }
     public static IEnumerable<AwsProfile> ListProfiles()
     {

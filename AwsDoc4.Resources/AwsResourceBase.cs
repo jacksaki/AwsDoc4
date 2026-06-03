@@ -21,6 +21,12 @@ public abstract class AwsResourceBase
     private void RefreshCore()
     {
     }
+
+    public static AwsProfile GetProfileFromName(string profile)
+    {
+        return AwsProfile.GetProfileFromName(profile) ?? throw new ArgumentException($"profile {profile} not found.");
+    }
+
     public async Task RefreshAsync(AwsProfile profile, CancellationToken ct)
     {
         RefreshCore();
