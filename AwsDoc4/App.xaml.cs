@@ -35,8 +35,8 @@ namespace AwsDoc4
                 services.AddSingleton<MainWindowViewModel>();
                 services.AddSingleton<SummaryBox>();
                 services.AddSingleton<SummaryBoxViewModel>();
-                services.AddSingleton<SelectResourceWindow>();
-                services.AddSingleton<SelectResourceWindowViewModel>();
+                services.AddTransient<SelectResourceWindow>();
+                services.AddTransient<SelectResourceWindowViewModel>();
                 services.AddSingleton<LoginWindow>();
                 services.AddSingleton<LoginWindowViewModel>();
                 services.AddTransient<MFAWindow>();
@@ -64,6 +64,7 @@ namespace AwsDoc4
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
             var config = GetService<AppConfig>()!;
             //Timeline.DesiredFrameRateProperty.OverrideMetadata(
             //    typeof(Timeline), 

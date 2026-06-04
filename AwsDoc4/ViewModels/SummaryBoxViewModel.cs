@@ -2,6 +2,8 @@
 using MaterialDesignThemes.Wpf;
 using ObservableCollections;
 using R3;
+using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 
 namespace AwsDoc4.ViewModels;
@@ -50,11 +52,13 @@ public class SummaryBoxViewModel:BoxViewModelBase
         this.ExecuteCommand = new ReactiveCommand();
         this.AddResourceCommand.Subscribe(_ =>
         {
-            var window = App.GetService<SelectResourceWindow>()!;
+            var window = new SelectResourceWindow();
+            var vm = new SelectResourceWindowViewModel();
+            window.DataContext = vm;
             if (window.ShowDialog()==true)
             {
                 var viewModel = App.GetService<AwsResourceViewModel>() !;
-                viewModel.Resource.Value = ((SelectResourceWindowViewModel)(window.DataContext)).SelectedResource.Value;
+                viewModel.Resource.Value = vm.SelectedResource.Value;
                 this.Resources.Add(viewModel);
             }
         });

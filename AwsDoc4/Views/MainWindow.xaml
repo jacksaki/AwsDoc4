@@ -16,7 +16,7 @@
     dlg:DialogParticipation.Register="{Binding}"
     Background="{DynamicResource MaterialDesignPaper}"
     BorderThickness="1"
-    FontFamily="pack:application,,,/MaterialDesignThemes.Wpf;conponent/Resources/Roboto/#Roboto"
+    FontFamily="pack:application,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
     GlowBrush="{DynamicResource AccentColorBrush}"
     Style="{StaticResource MaterialDesignWindow}"
     TextElement.FontSize="16"

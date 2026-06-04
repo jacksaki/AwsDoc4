@@ -13,7 +13,7 @@
     BorderThickness="1"
     GlowBrush="{DynamicResource AccentColorBrush}"
     Style="{StaticResource MaterialDesignWindow}"
-    FontFamily="pack:application,,,/MaterialDesignThemes.Wpf;conponent/Resources/Roboto/#Roboto"
+    FontFamily="pack:application,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
     TextElement.FontSize="16"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
         TextElement.FontWeight="Regular"

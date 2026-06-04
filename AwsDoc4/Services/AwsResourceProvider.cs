@@ -24,7 +24,7 @@ internal class AwsResourceProvider
         {
             try
             {
-                var asm = Assembly.LoadFile(path);
+                var asm = Assembly.LoadFrom(path);
                 var types=asm.GetTypes().AsValueEnumerable().Where(x=>
                     x.IsSubclassOf(typeof(AwsResourceBase)) &&
                     x.GetCustomAttribute<AwsResourceAttribute>() != null

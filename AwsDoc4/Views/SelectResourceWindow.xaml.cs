@@ -22,7 +22,6 @@ namespace AwsDoc4.Views
         public SelectResourceWindow()
         {
             InitializeComponent();
-            this.DataContext = App.GetService<SelectResourceWindowViewModel>();
         }
     }
 }
