@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="AwsDoc4.Views.EC2CommandBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mahApps="http://metro.mahapps.com/winfx/xaml/controls"
+    xmlns:v="clr-namespace:AwsDoc4.Views"
+    xmlns:vm="clr-namespace:AwsDoc4.ViewModels"
+    xmlns:wpf="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Button Command="{Binding CopyAllCommand}" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="4" Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                <wpf:PackIcon Kind="ClipboardAdd" Width="26" Height="26"/>
+            </Button>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding FilteredLogsView}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Date}" />
+                                <TextBlock Text="{Binding Text}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Margin="4" Text="{Binding CommandText.Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedTextBox}" wpf:HintAssist.Hint="コマンド"/>
+            <Button Grid.Column="1" Command="{Binding SendCommand}" Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryLightButton}">
+                <wpf:PackIcon Kind="Send" Height="26" Width="26"/>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <ComboBox Margin="4" ItemsSource="{Binding FilteredInstancesView}" SelectedItem="{Binding SelectedInstance.Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MaterialDesignOutlinedComboBox}" DisplayMemberPath="Text.Value" wpf:HintAssist.Hint="インスタンス"/>
+            <Button Grid.Column="1" Command="{Binding RefreshInstancesCommand}" Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryLightButton}">
+                <wpf:PackIcon Kind="Refresh" Height="26" Width="26"/>
+            </Button>
+        </Grid>
+    </Grid>
+</UserControl>

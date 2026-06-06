@@ -106,6 +106,7 @@ namespace AwsDoc4.ViewModels
         private static IEnumerable<NavigationMenuItem> GenerateMenuItems()
         {
             yield return new NavigationMenuItem("Summary", typeof(SummaryBox), PackIconKind.Home);
+            yield return new NavigationMenuItem("EC2", typeof(EC2CommandBox), PackIconKind.Terminal);
             yield return new NavigationMenuItem("Color", typeof(ColorSettingsBox), PackIconKind.Palette);
         }
 

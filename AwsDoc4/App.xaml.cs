@@ -35,6 +35,8 @@ namespace AwsDoc4
                 services.AddSingleton<MainWindowViewModel>();
                 services.AddSingleton<SummaryBox>();
                 services.AddSingleton<SummaryBoxViewModel>();
+                services.AddSingleton<EC2CommandBox>();
+                services.AddSingleton<EC2CommandBoxViewModel>();
                 services.AddTransient<SelectResourceWindow>();
                 services.AddTransient<SelectResourceWindowViewModel>();
                 services.AddSingleton<LoginWindow>();
